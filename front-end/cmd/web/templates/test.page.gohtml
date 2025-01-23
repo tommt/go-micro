@@ -8,6 +8,7 @@
                 <hr>
 
                 <a id="brokerBtn"  class="btn btn-outline-secondary" href="javascript:void(0);">Test Broker</a>
+                <a id="authBrokerBtn"  class="btn btn-outline-secondary" href="javascript:void(0);">Test Auth</a>
 
                 <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
                     <span class="text-muted">Output shows here...</span>
@@ -34,6 +35,7 @@
 {{define "js"}}
     <script>
         let brokerBtn = document.getElementById('brokerBtn');
+        let authBrokerBtn = document.getElementById('authBrokerBtn');
         let output = document.getElementById('output');
         let payload = document.getElementById('payload');
         let received = document.getElementById('received');
@@ -48,6 +50,41 @@
                 console.log("data", data);
                 payload.innerHTML = "EMpty Post Request";
                 received.innerHTML = JSON.stringify(data, null, 2);
+
+                if (data.error) {
+                    output.innerHTML += `<br><span class="text-danger">${data.error}</span>`;
+                } else {
+                    output.innerHTML += `<br><span class="text-danger">${data.message}</span>`;
+                }
+            })
+            .catch(error => {
+                output.innerHTML = JSON.stringify(error, null, 2);
+            });
+        });
+
+        authBrokerBtn.addEventListener('click', async () => {
+           const payload = {
+            action: 'auth',
+            auth :{
+                email: 'admin@example.com',
+                password: 'verysecret'
+            },
+           
+           }
+           const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+           const body = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(payload)
+           }
+
+           fetch('http:\/\/localhost:8000/handle', body)
+            .then(response => response.json())
+            .then(data => {
+                console.log("data", data);
+                payload.innerHTML = JSON.stringify(payload, null, 4);
+                received.innerHTML = JSON.stringify(data, null, 4);
 
                 if (data.error) {
                     output.innerHTML += `<br><span class="text-danger">${data.error}</span>`;
