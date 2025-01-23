@@ -37,7 +37,7 @@
         let brokerBtn = document.getElementById('brokerBtn');
         let authBrokerBtn = document.getElementById('authBrokerBtn');
         let output = document.getElementById('output');
-        let payload = document.getElementById('payload');
+        let sent = document.getElementById('payload');
         let received = document.getElementById('received');
 
         brokerBtn.addEventListener('click', async () => {
@@ -48,7 +48,7 @@
             .then(response => response.json())
             .then(data => {
                 console.log("data", data);
-                payload.innerHTML = "EMpty Post Request";
+                sent.innerHTML = "Empty Post Request";
                 received.innerHTML = JSON.stringify(data, null, 2);
 
                 if (data.error) {
@@ -82,14 +82,13 @@
            fetch('http:\/\/localhost:8000/handle', body)
             .then(response => response.json())
             .then(data => {
-                console.log("data", data);
-                payload.innerHTML = JSON.stringify(payload, null, 4);
+                sent.innerHTML = JSON.stringify(payload, null, 4);
                 received.innerHTML = JSON.stringify(data, null, 4);
 
                 if (data.error) {
                     output.innerHTML += `<br><span class="text-danger">${data.error}</span>`;
                 } else {
-                    output.innerHTML += `<br><span class="text-danger">${data.message}</span>`;
+                    output.innerHTML += `<br><span class="text-primary">${data.message}</span>`;
                 }
             })
             .catch(error => {
